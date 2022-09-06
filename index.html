@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://bundle.run/pixelmatch@5.2.0"></script>
+</head>
+<body>
+    <canvas id="canvas-1" width="200" height="100" style="border:1px solid #d3d3d3;"></canvas>
+    <br>
+    <canvas id="canvas-2" width="200" height="100" style="border:1px solid #d3d3d3;"></canvas>
+    <br>
+    <canvas id="canvas-diff" width="200" height="100" style="border:1px solid #d3d3d3;"></canvas>
+
+    <script>
+        const ctx1 = document.getElementById("canvas-1").getContext("2d");
+        const ctx2 = document.getElementById("canvas-2").getContext("2d");
+        const ctxDiff = document.getElementById("canvas-diff").getContext("2d");
+
+        function draw(ctx1, ctx2) {
+            ctx1.font = "30px Arial";
+            ctx1.fillText("Hello World", 10, 50);
+
+            ctx2.font = "30px Arial";
+            ctx2.fillText("Hello World!", 10, 50);
+        }
+
+        function diff(ctx1, ctx2, ctxDiff) {
+            const width = 200;
+            const height = 100;
+            
+            const img1 = ctx1.getImageData(0, 0, width, height);
+            const img2 = ctx2.getImageData(0, 0, width, height);
+            const diff = ctxDiff.createImageData(width, height);
+            pixelmatch(img1.data, img2.data, diff.data, width, height, {threshold: 0.1});
+            ctxDiff.putImageData(diff, 0, 0);
+        }
+
+        draw(ctx1, ctx2);
+        diff(ctx1, ctx2, ctxDiff);
+    </script>
+</body>
+</html>
